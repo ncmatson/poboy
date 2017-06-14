@@ -27,13 +27,13 @@ app.use('/static', express.static(path.join(__dirname,'public')));
 // });
 //https://github.com/expressjs/express/wiki/Migrating-from-3.x-to-4.x
 
-function init() {
+// function init() {
   app.get('/', routes.index);
 
   http.createServer(app).listen(app.get('port'), function() {
     console.log('express server listening on port ' + app.get('port'));
   });
-}
+// }
 
 // app.use(express.static(path.join(__dirname, 'static')))
 // app.use(bodyParser.urlencoded({ extended: false }));
