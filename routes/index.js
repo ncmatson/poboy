@@ -3,5 +3,5 @@
  */
 
 exports.index = function(req, res) {
-  res.render('index', {title : 'POBOY'});
+  res.render('index', {title : 'POBOY', stuff:process.env});
 };
