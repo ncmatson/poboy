@@ -16,7 +16,6 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
-console.log(process.env.NODE_ENV);
 //app.use('/static', express.static(path.join(__dirname,'public')));
 
 // app.configure('development', function() {
