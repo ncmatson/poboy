@@ -35,6 +35,11 @@ function init() {
   });
 }
 
+if (app.env.NODE_ENV == 'production') {
+  
+  app.set('connection', pg.connect())
+}
+
 init();
 
 // app.use(express.static(path.join(__dirname, 'static')))
