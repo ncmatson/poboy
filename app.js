@@ -25,13 +25,16 @@ function init() {
 }
 
 if (process.env.NODE_ENV == 'production') {
-  app.set('connection', pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+  console.log('in production')
+  var config = {
+    user: process.env.RDS_USERNAME, //env var: PGUSER
+    database: process.env.RDS_DB_NAME, //env var: PGDATABASE
+    password: process.env.RDS_PASSWORD, //env var: PGPASSWORD
+    host: proccess.env.RDS_HOSTNAME, // Server hosting the postgres database
+    port: process.env.RDS_PORT, //env var: PGPORT
 
-  }));
-}
-else if (process.env.NODE_ENV == 'development') {
-  console.log('in development')
-  var connection = pg.connect('postgres://cameronmatson@localhost/poboy_db', function (err, client, done){
+  }
+  var connection = pg.connect(config, function (err, client, done){
     if (err){
       console.log('connection oops');
     }
@@ -45,8 +48,23 @@ else if (process.env.NODE_ENV == 'development') {
   });
   app.set('connection', connection);
 }
+else if (process.env.NODE_ENV == 'development') {
+  console.log('in development')
+  var connection = pg.connect('postgres://cameronmatson@localhost/poboy_db', function (err, client, done){
+    if (err){
+      console.log('connection oops');
+    }
+    client.query('select \'turkey\'', function(err, result) {
+      if (err) {
+        console.log('query oops');
+      }
+      console.log(result);)
+      done();
+    });
+  });
+  app.set('connection', connection);
+}
 
-init();
 
 // app.use(express.static(path.join(__dirname, 'static')))
 // app.use(bodyParser.urlencoded({ extended: false }));
