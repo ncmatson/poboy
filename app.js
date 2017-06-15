@@ -30,7 +30,7 @@ if (process.env.NODE_ENV == 'production') {
     user: process.env.RDS_USERNAME, //env var: PGUSER
     database: process.env.RDS_DB_NAME, //env var: PGDATABASE
     password: process.env.RDS_PASSWORD, //env var: PGPASSWORD
-    host: proccess.env.RDS_HOSTNAME, // Server hosting the postgres database
+    host: process.env.RDS_HOSTNAME, // Server hosting the postgres database
     port: process.env.RDS_PORT, //env var: PGPORT
 
   }
