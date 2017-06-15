@@ -3,5 +3,5 @@
  */
 
 exports.index = function(req, res) {
-  res.render('index', {title : 'POBOY', env : [process.env.RDS_HOSTNAME, process.env.DATABASE_URL]});
+  res.render('index', {title : 'POBOY'});
 };

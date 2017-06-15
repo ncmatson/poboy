@@ -16,17 +16,6 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
-//app.use('/static', express.static(path.join(__dirname,'public')));
-
-// app.configure('development', function() {
-//   console.log('using dev settings');
-// });
-//
-// app.configure('production', function() {
-//   console.log('using prod settings');
-// });
-//https://github.com/expressjs/express/wiki/Migrating-from-3.x-to-4.x
-
 function init() {
   app.get('/', routes.index);
 
@@ -36,8 +25,25 @@ function init() {
 }
 
 if (process.env.NODE_ENV == 'production') {
+  app.set('connection', pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 
-  //app.set('connection', pg.connect())
+  }));
+}
+else if (process.env.NODE_ENV == 'development') {
+  console.log('in development')
+  var connection = pg.connect('postgres://cameronmatson@localhost/poboy_db', function (err, client, done){
+    if (err){
+      console.log('connection oops');
+    }
+    client.query('select \'turkey\'', function(err, result) {
+      if (err) {
+        console.log('query oops');
+      }
+      console.log(result);
+      done();
+    });
+  });
+  app.set('connection', connection);
 }
 
 init();
