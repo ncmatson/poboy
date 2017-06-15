@@ -58,14 +58,14 @@ else if (process.env.NODE_ENV == 'development') {
       if (err) {
         console.log('query oops');
       }
-      console.log(result);)
+      console.log(result);
       done();
     });
   });
   app.set('connection', connection);
 }
 
-
+init();
 // app.use(express.static(path.join(__dirname, 'static')))
 // app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(bodyParser.json());
