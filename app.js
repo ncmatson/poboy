@@ -27,12 +27,11 @@ function init() {
 if (process.env.NODE_ENV == 'production') {
   console.log('in production')
   var config = {
-    user: process.env.RDS_USERNAME, //env var: PGUSER
-    database: process.env.RDS_DB_NAME, //env var: PGDATABASE
-    password: process.env.RDS_PASSWORD, //env var: PGPASSWORD
-    host: process.env.RDS_HOSTNAME, // Server hosting the postgres database
-    port: process.env.RDS_PORT, //env var: PGPORT
-
+    user: process.env.RDS_USERNAME,
+    database: process.env.RDS_DB_NAME,
+    password: process.env.RDS_PASSWORD,
+    host: process.env.RDS_HOSTNAME,
+    port: process.env.RDS_PORT
   }
   var connection = pg.connect(config, function (err, client, done){
     if (err){
@@ -42,7 +41,6 @@ if (process.env.NODE_ENV == 'production') {
       if (err) {
         console.log('query oops');
       }
-      console.log(result);
       done();
     });
   });
@@ -58,7 +56,6 @@ else if (process.env.NODE_ENV == 'development') {
       if (err) {
         console.log('query oops');
       }
-      console.log(result);
       done();
     });
   });
