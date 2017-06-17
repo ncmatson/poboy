@@ -25,6 +25,8 @@ var config = {
   port: process.env.RDS_PORT
 }
 
+console.log('hella stuff');
+console.log(JSON.stringify(process.env));
 console.log(JSON.stringify(config));
 
 if (process.env.NODE_ENV == 'production') {
