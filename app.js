@@ -46,21 +46,28 @@ app.post('/add_device', device.add_device);
 
 var server = http.createServer(app);
 
-pool.query('CREATE TABLE devices (' +
-            'ID SERIAL PRIMARY KEY, ' +
-            'NAME VARCHAR(40), ' +
-            'STATUS BOOLEAN)',
-            function (err) {
-              if (err) {
-                console.log(err.message);
-                return;
-              }
-            });
-
-pool.query('INSERT INTO devices VALUES (DEFAULT,\'turkey\',\'on\')', function(err) {
-  if (err) {console.log(err.message);}
-  console.log('inserted');
+pool.query('DROP TABLE IF EXISTS devices', function(err) {
+  if(err){
+    console.log(err.message);
+    return;
+  }
+  console.log('dropped');
+  pool.query('CREATE TABLE devices (ID SERIAL PRIMARY KEY, NAME VARCHAR(40), STATUS BOOLEAN)', function (err) {
+    if (err) {
+      console.log('created');
+      console.log(err.message);
+      return;
+    }
+    pool.query('INSERT INTO devices VALUES (DEFAULT,\'turkey\',\'on\')', function(err) {
+      if (err) {console.log(err.message);}
+      console.log('inserted');
+    });
+  });
 });
+
+
+
+
 
 app.set('connection', pool);
 
