@@ -17,10 +17,30 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
+var config = {
+  user: process.env.RDS_USERNAME,
+  database: process.env.RDS_DB_NAME,
+  password: process.env.RDS_PASSWORD,
+  host: process.env.RDS_HOSTNAME,
+  port: process.env.RDS_PORT
+}
+
+if (process.env.NODE_ENV == 'production') {
+  console.log('in production')
+  var pool = new pg.Pool(config);
+}
+
+else if (process.env.NODE_ENV == 'development') {
+  console.log('in development')
+  var pool = new pg.Pool({database: 'poboy_db'});
+}
+app.set('connection', pool);
+
+
 var pool = new pg.Pool({
   database: 'poboy_db'
 });
-// pool.connect();
+
 app.get('/', routes.index);
 app.post('/add_device', device.add_device);
 
@@ -47,33 +67,3 @@ app.set('connection', pool);
 server.listen(app.get('port'), function() {
   console.log('express server listening on port ' + app.get('port'));
 });
-
-// var config = {
-//   user: process.env.RDS_USERNAME,
-//   database: process.env.RDS_DB_NAME,
-//   password: process.env.RDS_PASSWORD,
-//   host: process.env.RDS_HOSTNAME,
-//   port: process.env.RDS_PORT
-// }
-
-// if (process.env.NODE_ENV == 'production') {
-//   console.log('in production')
-//   var connection = pg.connect(config, function (err, client, done){
-//     if (err){
-//       console.log('connection oops');
-//     }
-//     app.set('connection', connection);
-//     done();
-//   });
-// }
-//
-// else if (process.env.NODE_ENV == 'development') {
-//   console.log('in development')
-//   var connection = pg.connect('postgres://cameronmatson@localhost/poboy_db', function (err, client, done){
-//     if (err){
-//       console.log('connection oops');
-//     }
-//     app.set('connection', connection);
-//     done();
-//   });
-// }
