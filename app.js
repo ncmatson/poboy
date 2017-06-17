@@ -24,7 +24,8 @@ var config = {
   host: process.env.RDS_HOSTNAME,
   port: process.env.RDS_PORT
 }
-console.log('im right here '+config);
+
+console.log(JSON.stringify(config));
 
 if (process.env.NODE_ENV == 'production') {
   console.log('in production')
