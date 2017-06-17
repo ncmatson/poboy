@@ -1,98 +1,79 @@
-// app/index.js
 const path        = require('path');
 const http        = require('http');
 const bodyParser  = require('body-parser');
 const express     = require('express');
 const routes      = require('./routes');
 
+var device = require('./routes/device');
+
 const pg = require('pg');
 
-
-// const conString = 'postgres://cameronmatson@localhost/poboy_db'
-
 var app = express();
+
+app.use(bodyParser());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
-function init() {
-  app.get('/', routes.index);
+var pool = new pg.Pool({
+  database: 'poboy_db'
+});
+// pool.connect();
+app.get('/', routes.index);
+app.post('/add_device', device.add_device);
 
-  http.createServer(app).listen(app.get('port'), function() {
-    console.log('express server listening on port ' + app.get('port'));
-  });
-}
+var server = http.createServer(app);
 
-if (process.env.NODE_ENV == 'production') {
-  console.log('in production')
-  var config = {
-    user: process.env.RDS_USERNAME,
-    database: process.env.RDS_DB_NAME,
-    password: process.env.RDS_PASSWORD,
-    host: process.env.RDS_HOSTNAME,
-    port: process.env.RDS_PORT
-  }
-  var connection = pg.connect(config, function (err, client, done){
-    if (err){
-      console.log('connection oops');
-    }
-    client.query('select \'turkey\'', function(err, result) {
-      if (err) {
-        console.log('query oops');
-      }
-      done();
-    });
-  });
-  app.set('connection', connection);
-}
-else if (process.env.NODE_ENV == 'development') {
-  console.log('in development')
-  var connection = pg.connect('postgres://cameronmatson@localhost/poboy_db', function (err, client, done){
-    if (err){
-      console.log('connection oops');
-    }
-    client.query('select \'turkey\'', function(err, result) {
-      if (err) {
-        console.log('query oops');
-      }
-      done();
-    });
-  });
-  app.set('connection', connection);
-}
+pool.query('CREATE TABLE devices (' +
+            'ID SERIAL PRIMARY KEY, ' +
+            'NAME VARCHAR(40), ' +
+            'STATUS BOOLEAN)',
+            function (err) {
+              if (err) {
+                console.log(err.message);
+                return;
+              }
+            });
 
-init();
-// app.use(express.static(path.join(__dirname, 'static')))
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json());
-//
-//
-// app.use(function(err, req, res, next){
-//   console.log('hmmm')
-//   res.status(500).send('err')
-// })
-//
-// app.post('/stuff', function(req, res, next){
-//   var name=req.body.name;
-//   var status=req.body.state;
-//   console.log("name = "+name+", state is "+status);
-//   res.end("yes");
-//
-//   pg.connect(conString, function (err, client, done) {
-//     if (err) {
-//       return next(err)
+pool.query('INSERT INTO devices VALUES (DEFAULT,\'turkey\',\'on\')', function(err) {
+  if (err) {console.log(err.message);}
+  console.log('inserted');
+});
+
+app.set('connection', pool);
+
+server.listen(app.get('port'), function() {
+  console.log('express server listening on port ' + app.get('port'));
+});
+
+// var config = {
+//   user: process.env.RDS_USERNAME,
+//   database: process.env.RDS_DB_NAME,
+//   password: process.env.RDS_PASSWORD,
+//   host: process.env.RDS_HOSTNAME,
+//   port: process.env.RDS_PORT
+// }
+
+// if (process.env.NODE_ENV == 'production') {
+//   console.log('in production')
+//   var connection = pg.connect(config, function (err, client, done){
+//     if (err){
+//       console.log('connection oops');
 //     }
-//     client.query('INSERT INTO devices VALUES (DEFAULT, $1, $2)', [name, status], function (err, result) {
-//       done()
+//     app.set('connection', connection);
+//     done();
+//   });
+// }
 //
-//       if (err) {
-//         return next(err)
-//       }
-//     })
-//   })
-// })
-//
-// app.listen(3000, function(){
-//   console.log('app listening on port 3000')
-// })
+// else if (process.env.NODE_ENV == 'development') {
+//   console.log('in development')
+//   var connection = pg.connect('postgres://cameronmatson@localhost/poboy_db', function (err, client, done){
+//     if (err){
+//       console.log('connection oops');
+//     }
+//     app.set('connection', connection);
+//     done();
+//   });
+// }
