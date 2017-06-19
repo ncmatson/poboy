@@ -3,7 +3,6 @@ exports.add_device = function(req, res) {
   var name = req.body.device.NAME
   var status = req.body.device.STATUS;
 
-  console.log('tryna add a device yo: ', name, status);
   req.app.get('connection').query('INSERT INTO devices VALUES (DEFAULT, $1::text, $2::boolean)', [name, status], function(err) {
     if (err) {
       res.send(err);
