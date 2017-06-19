@@ -1,5 +1,4 @@
 exports.add_device = function(req, res) {
-  console.log('here ' + JSON.stringify(req.body.device));
   var name = req.body.device.NAME
   var status = req.body.device.STATUS;
 

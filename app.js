@@ -17,7 +17,7 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
-var config = {
+var p_config = {
   user: process.env.RDS_USERNAME,
   database: process.env.RDS_DB_NAME,
   password: process.env.RDS_PASSWORD,
@@ -27,11 +27,11 @@ var config = {
 
 console.log('hella stuff');
 console.log(JSON.stringify(process.env));
-console.log(JSON.stringify(config));
 
 if (process.env.NODE_ENV == 'production') {
   console.log('in production')
-  var pool = new pg.Pool(config);
+  console.log(JSON.stringify(p_config));
+  var pool = new pg.Pool(p_config);
 }
 
 else if (process.env.NODE_ENV == 'development') {
@@ -68,10 +68,6 @@ pool.query('DROP TABLE IF EXISTS devices', function(err) {
     });
   });
 });
-
-
-
-
 
 app.set('connection', pool);
 
