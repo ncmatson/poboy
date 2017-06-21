@@ -40,11 +40,6 @@ else if (process.env.NODE_ENV == 'development') {
 }
 app.set('connection', pool);
 
-
-var pool = new pg.Pool({
-  database: 'poboy_db'
-});
-
 app.get('/', routes.index);
 app.post('/add_device', device.add_device);
 
