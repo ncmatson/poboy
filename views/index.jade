@@ -2,7 +2,7 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Do the thing
 
   form(action="/add_device", method="post")
     input(name="device[NAME]", type="textbox", placeholder="enter a device")
