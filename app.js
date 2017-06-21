@@ -31,7 +31,7 @@ console.log(JSON.stringify(process.env));
 if (process.env.NODE_ENV == 'production') {
   console.log('in production')
   console.log(JSON.stringify(p_config));
-  var pool = new pg.Pool(p_config);
+  var pool = new pg.Pool();
 }
 
 else if (process.env.NODE_ENV == 'development') {
