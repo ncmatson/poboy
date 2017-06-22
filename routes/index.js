@@ -3,13 +3,12 @@
  */
 
 exports.index = function(req, res) {
-  res.app.get('connection').query('SELECT * FROM devices', function(err, rows){
+  res.app.get('connection').query('SELECT * FROM devices', function(err, result){
     if (err) {
       res.send(err);
     }
     else {
-      console.log(JSON.stringify(rows.rows));
-      res.render('index', {title: 'POBOY', devices: rows.rows});
+      res.render('index', {title: 'POBOY', devices: result.rows});
     }
   })
 };

@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  h1= title
+  p Do the thing
+
+  form(action="/add_device", method="post")
+    input(name="NAME", type="textbox", placeholder="enter a device")
+    input(name="STATUS", type="radio", value="on")
+    | on
+    input(name="STATUS", type="radio", value="off", checked)
+    | off
+    input(type="submit", value="Add Device")
+
+  div
+    h3 devices
+    table(border="1")
+      tr
+        td Name
+        td Status
+      each dev in devices
+        tr
+          td #{dev.name}
+          td
+            button(
+              id    = dev.name
+              class = "staus_btn"
+              name  = "STATUS"
+              value = dev.status ? 'true' : 'false'
+              ) #{dev.status ? 'on' : 'off'}
