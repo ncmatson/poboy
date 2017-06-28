@@ -21,13 +21,49 @@ $(document).on("click", ":button.status_btn", function(){
   }
 );
 
-$(document).on("click", ":button.delete_btn", function(){
-  var name = $(this).attr('id');
-  $.ajax({
-    url: '/delete_device',
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({NAME: name})
-  })
-  $(location.reload());
-});
+// $(document).on("click", ":button.delete_btn", function(){
+//   var name = $(this).attr('id');
+//   $.ajax({
+//     url: '/delete_device',
+//     type: 'POST',
+//     contentType: 'application/json',
+//     data: JSON.stringify({NAME: name})
+//   })
+//   $(location.reload());
+// });
+
+
+$(function() {
+    $("#dialog").dialog({
+      title: "Really?",
+      autoOpen: false,
+      modal: true,
+      show: "slideDown"
+    });
+  });
+
+
+$(document).on("click", ":button.delete_btn", function(e) {
+    e.preventDefault();
+
+    var name = $(this).attr('id');
+    $("#dialog").dialog({
+      buttons : {
+        "Confirm" : function() {
+          console.log(name);
+          $.ajax({
+            url: '/delete_device',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({NAME: name})
+          })
+          $(location.reload());
+        },
+        "Cancel" : function() {
+          $(this).dialog("close");
+        }
+      }
+    });
+
+    $("#dialog").dialog("open");
+  });
