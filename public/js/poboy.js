@@ -1,6 +1,6 @@
 console.log('hey');
 
-$(document).on("click", ":button", function(){
+$(document).on("click", ":button.status_btn", function(){
     var name   = $(this).attr('id');
     if ($(this).val() == "true") {
       $(this).html('off');
@@ -20,3 +20,14 @@ $(document).on("click", ":button", function(){
     })
   }
 );
+
+$(document).on("click", ":button.delete_btn", function(){
+  var name = $(this).attr('id');
+  $.ajax({
+    url: '/delete_device',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({NAME: name})
+  })
+  $(location.reload());
+});

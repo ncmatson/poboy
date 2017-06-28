@@ -23,3 +23,16 @@ exports.update_device = function(req, res) {
     }
   });
 };
+
+exports.delete_device = function(req, res) {
+  var name = req.body.NAME;
+  req.app.get('connection').query('DELETE FROM devices WHERE name = $1::text', [name], function(err){
+    if (err) {
+      console.log(err);
+      res.send(err);
+    } else {
+      //for (i = 0; i < 10000; i=i+1)
+      res.redirect('/');
+    }
+  });
+};

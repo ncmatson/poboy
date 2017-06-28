@@ -1,0 +1,11 @@
+.delete_btn {
+  background-color: red;
+}
+
+button[value="false"]{
+  background-color: #00ace6;
+}
+
+button[value="true"]{
+  background-color: #ffff99;
+}

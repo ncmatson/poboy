@@ -21,6 +21,7 @@ app.set('view engine', 'pug');
 app.get('/', routes.index);
 app.post('/add_device', device.add_device);
 app.post('/update_device', device.update_device);
+app.post('/delete_device', device.delete_device);
 
 if (process.env.NODE_ENV == 'development'){
   process.env.PGDATABASE = 'poboy_db'

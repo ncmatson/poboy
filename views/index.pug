@@ -24,7 +24,12 @@ block content
           td
             button(
               id    = dev.name
-              class = "staus_btn"
+              class = "status_btn"
               name  = "STATUS"
               value = dev.status ? 'true' : 'false'
-              ) #{dev.status ? 'on' : 'off'}
+            ) #{dev.status ? 'on' : 'off'}
+            button(
+              id    = dev.name
+              class = "delete_btn"
+              name  = "DELETE"
+            ) DELETE DEVICE 
