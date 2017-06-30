@@ -21,18 +21,6 @@ $(document).on("click", ":button.status_btn", function(){
   }
 );
 
-// $(document).on("click", ":button.delete_btn", function(){
-//   var name = $(this).attr('id');
-//   $.ajax({
-//     url: '/delete_device',
-//     type: 'POST',
-//     contentType: 'application/json',
-//     data: JSON.stringify({NAME: name})
-//   })
-//   $(location.reload());
-// });
-
-
 $(function() {
     $("#dialog").dialog({
       title: "Really?",
@@ -42,6 +30,17 @@ $(function() {
     });
   });
 
+death = function(name){
+  console.log(name);
+  $.ajax({
+    url: '/delete_device',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({NAME: name})
+  })
+
+  $(location.reload());
+}
 
 $(document).on("click", ":button.delete_btn", function(e) {
     e.preventDefault();
@@ -50,14 +49,7 @@ $(document).on("click", ":button.delete_btn", function(e) {
     $("#dialog").dialog({
       buttons : {
         "Confirm" : function() {
-          console.log(name);
-          $.ajax({
-            url: '/delete_device',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({NAME: name})
-          })
-          $(location.reload());
+          death(name);
         },
         "Cancel" : function() {
           $(this).dialog("close");
