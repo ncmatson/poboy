@@ -1,5 +1,6 @@
 var pg   = require('pg');
 var pool = new pg.Pool();
+console.log('making a new pool');
 
 module.exports = {
   init: function(){
