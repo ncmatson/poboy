@@ -59,9 +59,12 @@ exports.check_status = function(req, res) {
       console.log(err);
     } else {
       if (result.rows.length > 0)
+      {
         res.send(result.rows[0].status);
+      }
       else{
-          res.send('error, device not found');
+        console.log('error, device not found');
+        res.send('error, device not found');
       }
     }
   })
