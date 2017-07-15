@@ -19,6 +19,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
 app.get('/', routes.index);
+app.get('/check_status/:device_name', device.check_status);
 app.get('/login', login.login);
 app.post('/login', login.validate);
 app.post('/add_device', device.add_device);

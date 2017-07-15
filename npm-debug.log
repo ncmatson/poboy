@@ -20,7 +20,7 @@
 13 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
 14 verbose pkgid poboy@0.0.1
 15 verbose cwd /home/cameron/poboy
-16 error Linux 4.8.0-54-generic
+16 error Linux 4.8.0-56-generic
 17 error argv "/usr/bin/nodejs" "/usr/bin/npm" "start"
 18 error node v4.2.6
 19 error npm  v3.5.2
