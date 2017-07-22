@@ -3,6 +3,7 @@ var db = require('../db')
 exports.add_device = function(req, res) {
   var name = req.body.NAME;
   var status = req.body.STATUS;
+  console.log('adding device', name);
 
   db.query('SELECT * FROM devices WHERE name = $1::text', [name], function (err, result){
     if (err) {
@@ -53,7 +54,6 @@ exports.delete_device = function(req, res) {
 
 exports.check_status = function(req, res) {
   var name = req.params.device_name;
-  console.log(name);
   db.query('SELECT status FROM devices WHERE name = $1::text', [name], function(err, result){
     if (err) {
       console.log(err);
@@ -63,7 +63,6 @@ exports.check_status = function(req, res) {
         res.send(result.rows[0].status);
       }
       else{
-        console.log('error, device not found');
         res.send('error, device not found');
       }
     }
