@@ -9,13 +9,13 @@ module.exports = {
         console.log(err.message);
         return;
       }
-      console.log('dropped');
-      pool.query('CREATE TABLE devices (ID SERIAL PRIMARY KEY, name VARCHAR(40), status BOOLEAN)', function (err) {
+      console.log('dropped device table');
+      pool.query('CREATE TABLE devices (ID SERIAL PRIMARY KEY, username VARCHAR(40), devicename VARCHAR(40), status BOOLEAN)', function (err) {
         if (err) {
           console.log(err.message);
           return;
         }
-        console.log('created');
+        console.log('created device table');
       });
     });
 
@@ -24,13 +24,13 @@ module.exports = {
         console.log(err.message);
         return;
       }
-      console.log('dropped users');
-      pool.query('CREATE TABLE users (u_id SERIAL PRIMARY KEY, email VARCHAR(40), password VARCHAR(40))', function(err) {
+      console.log('dropped user table');
+      pool.query('CREATE TABLE users (u_id SERIAL PRIMARY KEY, username VARCHAR(40), password VARCHAR(40))', function(err) {
         if (err) {
           console.log(err.message);
           return;
         }
-        console.log('created');
+        console.log('created user table');
       })
     });
   },
@@ -38,4 +38,5 @@ module.exports = {
   query: function(text, values, callback) {
     return pool.query(text, values, callback);
   }
+
 };

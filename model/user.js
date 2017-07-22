@@ -1,74 +1,88 @@
-function User(connection) {
-  this.id = 0;
-  this.email = "";
-  this.password = "";
+var db = require('../db')
 
-  this.connection = connection;
+function User(username, password) {
+  this.id = 0;
+  this.username = username
+  this.password = password;
 }
 
-User.prototype.save = function (callback) {
-  console.log('tryna save '+this.email);
-  var client = this.connection
+
+User.prototype.save = function (username, pass, callback) {
+  console.log('tryna save '+username);
 
   // check to see if user is already there
-  client.query("SELECT * FROM users WHERE email = $1::varchar", this.email, function(err, result){
+  db.query("SELECT * FROM users WHERE username = $1::varchar", [username], function(err, result){
     // if somethin happened in this query we're screwed
     if (err) {
+      console.log('preoops');
       console.log(err);
-      return err;
+      return callback(err);
     }
     // if we gucci
     else {
       // if there were no were no body named that add'em
       if (result.rows.length == 0) {
-        client.query("INSERT INTO users(email, password) VALUES ($1, $2)", [this.email, this.password], function(err, result) {
+        db.query("INSERT INTO users(username, password) VALUES ($1, $2)", [username, password], function(err, result) {
           if (err) {
+            console.log('oops');
             console.log(err);
-            return err;
+            return callback(err);
           }
           else {
-            var user = new User();
-            user.email = result.row[0]['email'];
-            user.password = result.row[0]['password'];
-            user.id = result.row[0]['id'];
-            return callback(user);
+            // now select to get the info
+            db.query("SELECT * FROM users WHERE username = $1::varchar", [username], function(err, result){
+              if (err){
+                console.log('real wierd');
+                console.log(err);
+                return err;
+              }
+              else{
+                var user = new User();
+                user.username = result.rows[0]['username'];
+                user.password = result.rows[0]['password'];
+                user.id = result.rows[0]['id'];
+                return callback(user.username);
+              }
+            });
           }
         });
       }
       else{
-        console.log('that email already existed ('+this.email+')');
+        console.log('that username already existed ('+username+')');
         return callback(null);
       }
     }
   });
 };
 
-User.prototype.findOne = function (email, callback) {
-    //TODO THIS IS NOT GOING TO WORK, FIGURE OUT HOW TO GET DB INTO THIS PLACE
-    var client = this.connection;
+// User.prototype.findOne = function (username, callback) {
+//     //TODO THIS IS NOT GOING TO WORK, FIGURE OUT HOW TO GET DB INTO THIS PLACE
+//     var client = this.connection;
+//
+//     var isNotAvailable = false; //we are assuming the username is taking
+//
+//     client.query("SELECT * FROM users WHERE username = $1::varchar", [username], function(err, result){
+//         if(err){
+//             return callback(err, isNotAvailable, this);
+//         }
+//         //if no rows were returned from query, then new user
+//         if (result.rows.length > 0){
+//             isNotAvailable = true; // update the user for return in callback
+//             console.log(username + ' is am not available!');
+//         }
+//         else{
+//             isNotAvailable = false;
+//             console.log(username + ' is available');
+//         }
+//         //the callback has 3 parameters:
+//         // parameter err: false if there is no error
+//         // parameter isNotAvailable: whether the username is available or not
+//         // parameter this: the User object;
+//
+//         client.end();
+//         return callback(false, isNotAvailable, this);
+//     });
+// //});
+// };
 
-    var isNotAvailable = false; //we are assuming the email is taking
-
-    client.query("SELECT * FROM users WHERE email = $1::varchar", [email], function(err, result){
-        if(err){
-            return callback(err, isNotAvailable, this);
-        }
-        //if no rows were returned from query, then new user
-        if (result.rows.length > 0){
-            isNotAvailable = true; // update the user for return in callback
-            console.log(email + ' is am not available!');
-        }
-        else{
-            isNotAvailable = false;
-            console.log(email + ' is available');
-        }
-        //the callback has 3 parameters:
-        // parameter err: false if there is no error
-        // parameter isNotAvailable: whether the email is available or not
-        // parameter this: the User object;
-
-        client.end();
-        return callback(false, isNotAvailable, this);
-    });
-//});
-};
+module.exports = User;

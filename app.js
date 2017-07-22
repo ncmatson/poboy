@@ -2,6 +2,8 @@ var path        = require('path');
 var http        = require('http');
 var bodyParser  = require('body-parser');
 var express     = require('express');
+var flash       = require('express-flash');
+var session    = require('express-session');
 
 var routes      = require('./routes');
 var login       = require('./routes/login');
@@ -14,6 +16,11 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: false}));
+app.use(flash());
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');

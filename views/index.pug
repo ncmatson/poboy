@@ -2,7 +2,7 @@ extends layout
 
 block content
   h1= title
-  p Do the thing
+  p Welcome #{user}
 
   form(action="/add_device", method="post")
     input(name="NAME", type="textbox", placeholder="enter a device")
@@ -20,7 +20,7 @@ block content
         td Status
       each dev in devices
         tr
-          td #{dev.name}
+          td #{dev.devicename}
           td
             button(
               id    = dev.name

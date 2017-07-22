@@ -5,7 +5,7 @@ exports.add_device = function(req, res) {
   var status = req.body.STATUS;
   console.log('adding device', name);
 
-  db.query('SELECT * FROM devices WHERE name = $1::text', [name], function (err, result){
+  db.query('SELECT * FROM devices WHERE devicename = $1::text', [name], function (err, result){
     if (err) {
       console.log(err);
       res.send(err);
@@ -15,7 +15,7 @@ exports.add_device = function(req, res) {
         res.redirect('/');
       }
       else {
-        db.query('INSERT INTO devices VALUES (DEFAULT, $1::text, $2::boolean)', [name, status], function(err) {
+        db.query('INSERT INTO devices VALUES (DEFAULT, DEFAULT, $1::text, $2::boolean)', [name, status], function(err) {
           if (err) {
             res.send(err);
           } else {
@@ -30,7 +30,7 @@ exports.add_device = function(req, res) {
 exports.update_device = function(req, res) {
   var name = req.body.NAME;
   var status = (req.body.STATUS == 'true' ? true : false);
-  db.query('UPDATE devices SET status = $1::bool WHERE name = $2::text', [status, name], function (err){
+  db.query('UPDATE devices SET status = $1::bool WHERE devicename = $2::text', [status, name], function (err){
     if (err) {
       console.log(err);
       res.send(err);
@@ -42,7 +42,7 @@ exports.update_device = function(req, res) {
 
 exports.delete_device = function(req, res) {
   var name = req.body.NAME;
-  db.query('DELETE FROM devices WHERE name = $1::text', [name], function(err){
+  db.query('DELETE FROM devices WHERE devicename = $1::text', [name], function(err){
     if (err) {
       console.log(err);
       res.send(err);
@@ -54,7 +54,7 @@ exports.delete_device = function(req, res) {
 
 exports.check_status = function(req, res) {
   var name = req.params.device_name;
-  db.query('SELECT status FROM devices WHERE name = $1::text', [name], function(err, result){
+  db.query('SELECT status FROM devices WHERE devicename = $1::text', [name], function(err, result){
     if (err) {
       console.log(err);
     } else {
