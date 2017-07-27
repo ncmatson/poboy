@@ -46,6 +46,7 @@ $(document).on("click", ":button.delete_btn", function(e) {
     e.preventDefault();
 
     var name = $(this).attr('id');
+    console.log(name);
     $("#dialog").dialog({
       buttons : {
         "Confirm" : function() {

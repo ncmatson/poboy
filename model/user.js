@@ -6,22 +6,44 @@ function User(username, password) {
   this.password = password;
 }
 
-
-User.prototype.save = function (username, pass, callback) {
-  console.log('tryna save '+username);
-
-  // check to see if user is already there
+User.prototype.findOne = function (username, callback) {
   db.query("SELECT * FROM users WHERE username = $1::varchar", [username], function(err, result){
     // if somethin happened in this query we're screwed
     if (err) {
-      console.log('preoops');
+      console.log('database error');
+      console.log(err);
+      return callback(true, null);
+    }
+    else {
+      if (result.rows.length == 1) {
+        var user = new User();
+        user.username = result.rows[0]['username'];
+        user.password = result.rows[0]['password'];
+        user.id = result.rows[0]['id'];
+        return callback(false, user)
+      }
+
+      else {
+        console.log('found %s users with %s name', result.rows.length, username);
+        return callback(false, null);
+      }
+    }
+  });
+}
+
+
+User.prototype.save = function (username, pass, callback) {
+  console.log('tryna save '+username);
+  var oneToSave = this;
+  oneToSave.findOne(username, function(err, user) {
+    if (err) {
+      console.log('something bad');
       console.log(err);
       return callback(err);
     }
-    // if we gucci
     else {
-      // if there were no were no body named that add'em
-      if (result.rows.length == 0) {
+      if (user == null) {
+        console.log('no one there good');
         db.query("INSERT INTO users(username, password) VALUES ($1, $2)", [username, password], function(err, result) {
           if (err) {
             console.log('oops');
@@ -29,31 +51,71 @@ User.prototype.save = function (username, pass, callback) {
             return callback(err);
           }
           else {
-            // now select to get the info
-            db.query("SELECT * FROM users WHERE username = $1::varchar", [username], function(err, result){
-              if (err){
-                console.log('real wierd');
+            oneToSave.findOne(username, function (err, user) {
+              if (err) {
+                console.log('again bad');
                 console.log(err);
-                return err;
+                return callback(err);
               }
-              else{
-                var user = new User();
-                user.username = result.rows[0]['username'];
-                user.password = result.rows[0]['password'];
-                user.id = result.rows[0]['id'];
-                return callback(user.username);
+              else {
+                return callback(user);
               }
             });
           }
         });
       }
-      else{
-        console.log('that username already existed ('+username+')');
+      else {
+        console.log('already there');
         return callback(null);
       }
     }
   });
-};
+}
+//   // check to see if user is already there
+//   db.query("SELECT * FROM users WHERE username = $1::varchar", [username], function(err, result){
+//     // if somethin happened in this query we're screwed
+//     if (err) {
+//       console.log('preoops');
+//       console.log(err);
+//       return callback(err);
+//     }
+//     // if we gucci
+//     else {
+//       // if there were no were no body named that add'em
+//       if (result.rows.length == 0) {
+//         db.query("INSERT INTO users(username, password) VALUES ($1, $2)", [username, password], function(err, result) {
+//           if (err) {
+//             console.log('oops');
+//             console.log(err);
+//             return callback(err);
+//           }
+//           else {
+//             // now select to get the info
+//             db.query("SELECT * FROM users WHERE username = $1::varchar", [username], function(err, result){
+//               if (err){
+//                 console.log('real wierd');
+//                 console.log(err);
+//                 return err;
+//               }
+//               else{
+//                 var user = new User();
+//                 user.username = result.rows[0]['username'];
+//                 user.password = result.rows[0]['password'];
+//                 user.id = result.rows[0]['id'];
+//                 return callback(user.username);
+//               }
+//             });
+//           }
+//         });
+//       }
+//       else{
+//         console.log('that username already existed ('+username+')');
+//         return callback(null);
+//       }
+//     }
+//   });
+// };
+
 
 // User.prototype.findOne = function (username, callback) {
 //     //TODO THIS IS NOT GOING TO WORK, FIGURE OUT HOW TO GET DB INTO THIS PLACE

@@ -3,11 +3,15 @@ extends layout
 block content
   h1 Welcome to Poboy
 
-  form(action="/login", method="post")
+  form#login(action="/login", method="post")
     input(name="username", type="textbox", placeholder="username")
+    br
     input(name="password", type="password", placeholder="password")
+    br
     input(type="submit", name="login", value="login")
-    input(type="submit", name="login", value="register")
+    br
+    input#check_register(name="newuser", type="checkbox")
+    p New User
 
   if (message.length > 0)
     .alert.alert-info !{message}

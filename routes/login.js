@@ -1,35 +1,58 @@
 var db = require('../db')
 var User = require('../model/user.js')
-var passport = require('../passport')
 
-exports.login = function(req, res) {
+exports.loginPage = function(req, res) {
   res.locals.message = req.flash('message');
   res.render('login', { title:'POBOY'});
 };
 
-exports.validate = function(req, res) {
+exports.register = function(req, res) {
   username = req.body.username;
   password = req.body.password;
 
-  if (req.body.login == "register"){
-    var user = new User(username, password);
-    user.save(username, password, function(user){
-      //if null then already exists
-      if (user == null) {
-        req.flash('message', 'that username already exists try again');
-        res.redirect('/login');
-      }
-      else if (user == username) {
-        res.redirect('/?username=' + username);
-      }
-      else {
-        res.render(err);
-      }
-    });
-  }
+  var user = new User(username, password);
+  user.save(username, password, function(user){
+    //if null then already exists
+    if (user == null) {
+      req.flash('message', 'that username already exists try again');
+      res.redirect('/login');
+    }
+    else if (user.username == username) {
+      res.redirect('/?username=' + username);
+    }
+    else {
+      console.log('something real weird');
+      res.render('bad...');
+    }
+  });
+};
 
-  else if (req.body.login == "login"){
-    console.log("na");
-    res.redirect('/');
-  }
+exports.login = function(req, res) {
+  username = req.body.username;
+  password = req.body.password;
+
+  console.log("na");
+  var user = new User(username, password);
+
+  user.findOne(username, function(err, user){
+    if (err) {
+      console.log('obvi bad');
+      req.flash('message', 'somesort of error');
+      res.redirect('/login');
+    }
+    if (user == null) {
+      console.log('it ain\'t there');
+      req.flash('message', 'invalid username');
+      res.redirect('/login');
+    }
+    else if (user.password != password){
+      req.flash('message', 'incorrect password');
+      res.redirect('/login');
+    }
+    else {
+      console.log('ya did it!');
+      res.redirect('/?username=' + user.username);
+    }
+
+  })
 };

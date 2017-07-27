@@ -42,6 +42,7 @@ exports.update_device = function(req, res) {
 
 exports.delete_device = function(req, res) {
   var name = req.body.NAME;
+  console.log('tryna delete %s', name)
   db.query('DELETE FROM devices WHERE devicename = $1::text', [name], function(err){
     if (err) {
       console.log(err);

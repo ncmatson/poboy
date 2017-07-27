@@ -3,7 +3,8 @@ var http        = require('http');
 var bodyParser  = require('body-parser');
 var express     = require('express');
 var flash       = require('express-flash');
-var session    = require('express-session');
+var session     = require('express-session');
+var passport    = require('passport');
 
 var routes      = require('./routes');
 var login       = require('./routes/login');
@@ -27,8 +28,9 @@ app.set('view engine', 'pug');
 
 app.get('/', routes.index);
 app.get('/check_status/:device_name', device.check_status);
-app.get('/login', login.login);
-app.post('/login', login.validate);
+app.get('/login', login.loginPage);
+app.post('/register', login.register);
+app.post('/login', login.login);
 app.post('/add_device', device.add_device);
 app.post('/update_device', device.update_device);
 app.post('/delete_device', device.delete_device);
