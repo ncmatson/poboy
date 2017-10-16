@@ -19,7 +19,8 @@ exports.register = function(req, res) {
       res.redirect('/login');
     }
     else if (user.username == username) {
-      res.redirect('/?username=' + username);
+      req.session.user = user;
+      res.redirect('/');
     }
     else {
       console.log('something real weird');
@@ -50,6 +51,32 @@ exports.login = function(req, res) {
     else if (user.password != password){
       req.flash('message', 'incorrect password');
       res.redirect('/login');
+    }
+    else {
+      console.log('ya did it!');
+      req.session.user = user;
+      res.redirect('/?username=' + user.username);
+    }
+
+  })
+};
+
+exports.loginMobile = function(req, res) {
+  username = req.body.username;
+  password = req.body.password;
+
+  console.log("na");
+  var user = new User(username, password);
+
+  user.findOne(username, function(err, user){
+    if (err) {
+      console.log('obvi bad');
+    }
+    if (user == null) {
+      console.log('it ain\'t there');
+      return('bad');
+    }
+    else if (user.password != password){
     }
     else {
       console.log('ya did it!');

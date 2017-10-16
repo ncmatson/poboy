@@ -1,9 +1,10 @@
 var db = require('../db')
 
 exports.add_device = function(req, res) {
+  var username = req.body.USER;
   var name = req.body.NAME;
   var status = req.body.STATUS;
-  console.log('adding device', name);
+  console.log('adding device', name, 'for user', username);
 
   db.query('SELECT * FROM devices WHERE devicename = $1::text', [name], function (err, result){
     if (err) {
@@ -15,8 +16,9 @@ exports.add_device = function(req, res) {
         res.redirect('/');
       }
       else {
-        db.query('INSERT INTO devices VALUES (DEFAULT, DEFAULT, $1::text, $2::boolean)', [name, status], function(err) {
+        db.query('INSERT INTO devices VALUES (DEFAULT, $1::text, $2::text, $3::boolean)', [username, name, status], function(err) {
           if (err) {
+            console.log(err);
             res.send(err);
           } else {
             res.redirect('/');
