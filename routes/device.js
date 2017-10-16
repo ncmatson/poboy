@@ -6,7 +6,7 @@ exports.add_device = function(req, res) {
   var status = req.body.STATUS;
   console.log('adding device', name, 'for user', username);
 
-  db.query('SELECT * FROM devices WHERE devicename = $1::text', [name], function (err, result){
+  db.query('SELECT * FROM devices WHERE devicename = $1::text AND username = $2::text', [name, username], function (err, result){
     if (err) {
       console.log(err);
       res.send(err);
