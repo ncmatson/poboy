@@ -1,8 +1,12 @@
 var pg   = require('pg');
 var pool = new pg.Pool();
+
+// just for debug...
 console.log('making a new pool');
 
 module.exports = {
+  
+  // called at app start up
   init: function(){
     pool.query('DROP TABLE IF EXISTS devices', function(err) {
       if(err){
@@ -35,6 +39,7 @@ module.exports = {
     });
   },
 
+  // helper function
   query: function(text, values, callback) {
     return pool.query(text, values, callback);
   }

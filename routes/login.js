@@ -6,6 +6,7 @@ exports.loginPage = function(req, res) {
   res.render('login', { title:'POBOY'});
 };
 
+// first time user
 exports.register = function(req, res) {
   username = req.body.username;
   password = req.body.password;
@@ -27,6 +28,7 @@ exports.register = function(req, res) {
   });
 };
 
+// existing user
 exports.login = function(req, res) {
   username = req.body.username;
   password = req.body.password;

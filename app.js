@@ -14,18 +14,28 @@ var db          = require('./db.js');
 
 var app = express();
 
+// for parsing json responses from client
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// for static directory
 app.use(express.static(__dirname + '/public'));
+
+// cookies
 app.use(session({
   secret: 'keyboard cat',
   resave: true,
   saveUninitialized: false}));
+
+// notifications
 app.use(flash());
+
+// port and views setup
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
+// routes
 app.get('/', routes.index);
 app.get('/check_status/:device_name', device.check_status);
 app.get('/login', login.loginPage);
@@ -35,6 +45,7 @@ app.post('/add_device', device.add_device);
 app.post('/update_device', device.update_device);
 app.post('/delete_device', device.delete_device);
 
+// check to setupt datbase
 if (process.env.NODE_ENV == 'development'){
   process.env.PGDATABASE = 'poboy_db'
 }
@@ -42,6 +53,7 @@ if (process.env.NODE_ENV == 'development'){
 db.init()
 //app.set('connection', pool);
 
+// start it up
 var server = http.createServer(app);
 
 server.listen(app.get('port'), function() {
