@@ -2,7 +2,7 @@ extends layout
 
 block content
   h1= title
-  p Welcome #{user}
+  p Welcome #{user.username}
 
   form(action="/add_device", method="post")
     input(name="NAME", type="textbox", placeholder="enter a device")
@@ -10,6 +10,7 @@ block content
     | on
     input(name="STATUS", type="radio", value="off", checked)
     | off
+    input(name="USER", type="hidden", value=user.username)
     input(type="submit", value="Add Device")
 
   div
@@ -34,5 +35,7 @@ block content
               name  = "DELETE"
             ) DELETE DEVICE
 
+  div.logout
+    a(href="/logout") Log Out
   #dialog
     p ya sure?

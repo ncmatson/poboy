@@ -1,13 +1,12 @@
 var db = require('../db')
 
 exports.index = function(req, res) {
-  var username = req.query.username;
-  db.query('SELECT * FROM devices', function(err, result){
+  db.query('SELECT * FROM devices WHERE username = $1::text', [req.user.username], function(err, result){
     if (err) {
       res.send(err);
     }
     else {
-      res.render('index', {title: 'POBOY', user: username, devices: result.rows});
+      res.render('index', {title: 'POBOY', devices: result.rows});
     }
   })
 };
