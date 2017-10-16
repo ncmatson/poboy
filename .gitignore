@@ -1,6 +1,7 @@
 node_modules/
 .ebextensions/
 npm-debug.log
+.secret.js
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

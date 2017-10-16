@@ -1,4 +1,5 @@
 var pg   = require('pg');
+
 var pool = new pg.Pool();
 
 // just for debug...

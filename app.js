@@ -28,9 +28,7 @@ app.use(session({
   resave: true,
   saveUninitialized: false}));
 
-<<<<<<< HEAD
 // notifications
-=======
 app.use(function(req, res, next) {
     if (req.session && req.session.user) {
       user = new User(null, null);
@@ -59,25 +57,20 @@ app.use(function(req, res, next) {
     }
   };
 
->>>>>>> 15d82a574ba398e96d592b4e96a5180028b9aeef
 app.use(flash());
 
 // port and views setup
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
-<<<<<<< HEAD
 
 // routes
-app.get('/', routes.index);
-=======
 app.get('/logout', function(req, res) {
   console.log(req.session);
   req.session.destroy();
   res.redirect('/');
 })
 app.get('/', requireLogin, routes.index);
->>>>>>> 15d82a574ba398e96d592b4e96a5180028b9aeef
 app.get('/check_status/:device_name', device.check_status);
 app.get('/login', login.loginPage);
 app.post('/register', login.register);
@@ -90,6 +83,7 @@ app.post('/delete_device', device.delete_device);
 // check to setupt datbase
 if (process.env.NODE_ENV == 'development'){
   process.env.PGDATABASE = 'poboy_db'
+  require('./.secret')
 }
 
 db.init()
@@ -100,5 +94,4 @@ var server = http.createServer(app);
 
 server.listen(app.get('port'), function() {
   console.log('express server listening on port ' + app.get('port'));
-  console.log(process.env)
 });
